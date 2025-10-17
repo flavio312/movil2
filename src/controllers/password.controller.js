@@ -56,7 +56,7 @@ const calculateEntropy = (password) => {
 const calculateCrackTime = (entropy) => {
   const attemptsPerSecond = Math.pow(10, 11);
   const totalCombinations = Math.pow(2, entropy);
-  const secondsToCrack = totalCombinations / attemptsPerSecond / 2; // Promedio: mitad del espacio
+  const secondsToCrack = totalCombinations / attemptsPerSecond / 2;
   
   const minute = 60;
   const hour = minute * 60;
