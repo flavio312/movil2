@@ -3,15 +3,16 @@ import dotenv from "dotenv";
 import sequelize from "./config/db.js";
 import authRoutes from "./routes/auth.routes.js";
 import productRoutes from "./routes/product.routes.js";
+import passwordRoutes from "./routes/password.routes.js";
 
 dotenv.config();
 const app = express();
 
 app.use(express.json());
 
-// Rutas
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/v1/password", passwordRoutes);
 
 const PORT = process.env.PORT || 4000;
 
