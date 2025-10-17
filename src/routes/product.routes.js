@@ -1,13 +1,22 @@
 import express from "express";
-import { createProduct, getProducts } from "../controllers/product.controller.js";
-import { verifyToken } from "../middlewares/auth.middleware.js";
+import { createProduct, getProducts, getProductById, updateProduct, deleteProduct } from "../controllers/product.controller.js";
+import { upload } from "../services/cloudinary.service.js";
 
 const router = express.Router();
 
-router.post("/", verifyToken, createProduct);
+// Crear producto con imagen
+router.post("/", upload.single("imagen"), createProduct);
+
+// Obtener todos los productos
 router.get("/", getProducts);
-router.get("/:id", getProducts);
-router.put("/:id", verifyToken, createProduct);
-router.delete("/:id", verifyToken, createProduct);
+
+// Obtener producto por ID
+router.get("/:id", getProductById);
+
+// Actualizar producto (sin imagen)
+router.put("/:id", updateProduct);
+
+// Eliminar producto
+router.delete("/:id", deleteProduct);
 
 export default router;
