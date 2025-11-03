@@ -1,25 +1,22 @@
-// src/services/cloudinary.service.js
 import { v2 as cloudinary } from "cloudinary";
 import multer from "multer";
 import streamifier from "streamifier";
 
-// Configuración de Cloudinary (usa tus variables en .env)
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Configurar multer para leer imágenes desde el buffer (sin guardarlas en disco)
 const storage = multer.memoryStorage();
 export const upload = multer({ storage });
 
-// Función para subir imágenes a Cloudinary
-export const uploadImage = (fileBuffer, folder = "productos-tienda") => {
+export const uploadToCloudinary = (fileBuffer, folder, title) => {
   return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
+    const stream = cloudinary.uploader.upload_stream(
       {
         folder,
+        tags: [title.toLowerCase().replace(/\s+/g, "-")],
         transformation: [
           { width: 800, height: 600, crop: "fill" },
           { quality: "auto" },
@@ -27,12 +24,12 @@ export const uploadImage = (fileBuffer, folder = "productos-tienda") => {
         ],
       },
       (error, result) => {
-        if (error) return reject(error);
-        resolve(result);
+        if (error) reject(error);
+        else resolve({ url: result.secure_url, publicId: result.public_id }); 
       }
     );
 
-    streamifier.createReadStream(fileBuffer).pipe(uploadStream);
+    streamifier.createReadStream(fileBuffer).pipe(stream);
   });
 };
 

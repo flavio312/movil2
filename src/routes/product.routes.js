@@ -5,7 +5,7 @@ import { upload } from "../services/cloudinary.service.js";
 const router = express.Router();
 
 // Crear producto con imagen
-router.post("/", upload.single("imagen"), createProduct);
+router.post("/", upload.single("image"), createProduct);
 
 // Obtener todos los productos
 router.get("/", getProducts);

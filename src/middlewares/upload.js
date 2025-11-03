@@ -2,13 +2,11 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Crear directorio temporal si no existe
 const tempDir = path.join(__dirname, '../temp');
 if (!fs.existsSync(tempDir)) {
   fs.mkdirSync(tempDir, { recursive: true });
 }
 
-// Configuración de almacenamiento temporal
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, tempDir);

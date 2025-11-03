@@ -41,14 +41,11 @@ export const ProductoCreateRequest = {
   description: '',
 };
 
-// PlatilloUpdateRequest sería una versión parcial de PlatilloCreateRequest
 export const PlatilloUpdateRequest = {
   title: '',
   description: '',
 };
 
-// Extender Request de Express para incluir file
-// En JS no se puede extender tipos, pero puedes documentarlo así:
 export const MulterRequest = {
   ...require('express').request,
   file: null // Express.Multer.File

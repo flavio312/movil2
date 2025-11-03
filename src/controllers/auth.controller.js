@@ -1,17 +1,22 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
-import dotenv from "dotenv";
+import { uploadToCloudinary } from "../services/cloudinary.service.js";
 
-dotenv.config();
 
 export const register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { username, email, password, fullName, phoneNumber } = req.body;
 
     // Validaciones
-    if (!name || !email || !password) {
+    if (!username || !email || !password || !fullName || !phoneNumber) {
       return res.status(400).json({ msg: "Todos los campos son obligatorios" });
+    }
+
+    let avatarUrl = null;
+    if (req.file) {
+      const uploadResult = await uploadToCloudinary(req.file.buffer, "avatars-users", username);
+      avatarUrl = uploadResult.url;
     }
 
     const userExist = await User.findOne({ where: { email } });
@@ -19,9 +24,17 @@ export const register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({ name, email, password: hashedPassword });
-    res.status(201).json({ msg: "Usuario registrado", user });
+    const user = await User.create({ 
+      username, 
+      email, 
+      password: hashedPassword, 
+      fullName, 
+      phoneNumber, 
+      avatarUrl, 
+    });
+    res.status(201).json({ msg: "Usuario registrado", username });
   } catch (error) {
+    console.error("Error en el registro:", error); 
     res.status(500).json({ msg: error.message });
   }
 };
@@ -43,5 +56,18 @@ export const login = async (req, res) => {
     res.json({ msg: "Login exitoso", token });
   } catch (error) {
     res.status(500).json({ msg: error.message });
+  }
+};
+
+export const getProfileById = async (req, res) => {
+  try{
+    const {id} = req.params;
+    const user = await User.findByPk(id);
+    if(!user){
+       return res.status(404).json({msg:"Usuario no encontrado"})
+    }
+    res.json(user); 
+  }catch(error){
+    res.status(500).json({msg:error.message})
   }
 };

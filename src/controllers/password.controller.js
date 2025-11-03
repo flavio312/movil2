@@ -205,9 +205,7 @@ export const evaluatePassword = async (req, res) => {
       recommendations: [
         'Usa al menos 12 caracteres',
         'Combina mayúsculas, minúsculas, números y símbolos',
-        'Evita palabras del diccionario y datos personales',
-        'No reutilices contraseñas entre diferentes servicios',
-        'Considera usar un gestor de contraseñas'
+        'Evita palabras del diccionario'
       ]
     };
     
