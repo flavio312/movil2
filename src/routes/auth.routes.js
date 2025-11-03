@@ -1,5 +1,6 @@
 import express from "express";
-import { register, login } from "../controllers/auth.controller.js";
+import { register, login, getProfileById } from "../controllers/auth.controller.js";
+import { upload } from "../services/cloudinary.service.js";
 
 const router = express.Router();
 
@@ -68,7 +69,7 @@ const router = express.Router();
  *             example:
  *               msg: "Error en el servidor"
  */
-router.post("/register", register);
+router.post("/register", upload.single("avatar"), register);
 
 /**
  * @swagger
@@ -128,5 +129,7 @@ router.post("/register", register);
  *               msg: "Error en el servidor"
  */
 router.post("/login", login);
+
+router.get("/user/:id",getProfileById);
 
 export default router;

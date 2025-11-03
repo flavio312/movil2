@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 setupSwagger(app);
 
 app.use("/api/auth", authRoutes);
-app.use("/api/products", productRoutes);
+app.use("/api/product", productRoutes);
 app.use("/api/v1/password", passwordRoutes);
 
 app.get("/", (req, res) => {
