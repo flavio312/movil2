@@ -16,27 +16,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", authRoutes);
 app.use("/api/product", productRoutes);
 
-app.get("/", (req, res) => {
-  res.json({ 
-    message: "🔐 API de Seguridad de la Información",
-    version: "1.0.0",
-    endpoints: {
-      authentication: {
-        register: "POST /api/auth/register",
-        login: "POST /api/auth/login"
-      },
-      products: {
-        list: "GET /api/products",
-        create: "POST /api/products",
-      }
-    },
-    features: [
-      "Evaluación de la fortaleza de contraseñas",
-    ]
-  });
-});
-
-
 app.use((err, req, res, next) => {
   console.error('Error:', err.message);
   res.status(err.status || 500).json({
