@@ -1,11 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import sequelize from "./config/db.js";
-import authRoutes from "./routes/auth.routes.js";
-import productRoutes from "./routes/product.routes.js";
-import passwordRoutes from "./routes/password.routes.js";
-import { setupSwagger } from "./config/swagger.js";
+import sequelize from "./src/config/db.js";
+import authRoutes from "./src/routes/auth.routes.js";
+import productRoutes from "./src/routes/product.routes.js";
 
 dotenv.config();
 const app = express();
@@ -15,20 +13,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-setupSwagger(app);
-
 app.use("/api/auth", authRoutes);
 app.use("/api/product", productRoutes);
-app.use("/api/v1/password", passwordRoutes);
 
 app.get("/", (req, res) => {
   res.json({ 
     message: "🔐 API de Seguridad de la Información",
     version: "1.0.0",
-    documentation: {
-      swagger: `${req.protocol}://${req.get('host')}/api-docs`,
-      openapi_json: `${req.protocol}://${req.get('host')}/api-docs.json`
-    },
     endpoints: {
       authentication: {
         register: "POST /api/auth/register",
@@ -37,9 +28,6 @@ app.get("/", (req, res) => {
       products: {
         list: "GET /api/products",
         create: "POST /api/products",
-      },
-      password_evaluation: {
-        evaluate: "POST /api/v1/password/evaluate"
       }
     },
     features: [
@@ -48,12 +36,6 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use((req, res) => {
-  res.status(404).json({ 
-    error: "Endpoint no encontrado",
-    documentation: "/api-docs"
-  });
-});
 
 app.use((err, req, res, next) => {
   console.error('Error:', err.message);
