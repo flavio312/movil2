@@ -47,13 +47,21 @@ export const login = async (req, res) => {
     if (!user) return res.status(404).json({ msg: "Usuario no encontrado" });
 
     const validPassword = await bcrypt.compare(password, user.password);
-    if (!validPassword) return res.status(401).json({ msg: "Contraseña incorrecta" });
+    if (!validPassword) return res.status(401).json({ msg: "Credenciales no correctas" });
+
+    const userData ={
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      fullName: user.fullName,
+      phoneNumber: user.phoneNumber
+    }
 
     const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
 
-    res.json({ msg: "Login exitoso", token });
+    res.json({ msg: "Login exitoso", token, user: userData });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

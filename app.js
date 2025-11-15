@@ -1,11 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import sequelize from "./config/db.js";
-import authRoutes from "./routes/auth.routes.js";
-import productRoutes from "./routes/product.routes.js";
-import passwordRoutes from "./routes/password.routes.js";
-import { setupSwagger } from "./config/swagger.js";
+import sequelize from "../src/config/db.js";
+import authRoutes from "../src/routes/auth.routes.js";
+import productRoutes from "../src/routes/product.routes.js";
+import passwordRoutes from "../src/routes/password.routes.js";
+import { setupSwagger } from "../src/config/swagger.js";
 
 dotenv.config();
 const app = express();
@@ -19,7 +19,6 @@ setupSwagger(app);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/product", productRoutes);
-app.use("/api/v1/password", passwordRoutes);
 
 app.get("/", (req, res) => {
   res.json({ 
