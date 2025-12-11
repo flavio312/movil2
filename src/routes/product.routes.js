@@ -16,6 +16,8 @@ router.get("/:id", getProductById);
 // Actualizar producto (sin imagen)
 router.put("/:id", updateProduct);
 
+router.put("/:id", upload.single("image"), updateProduct);
+
 // Eliminar producto
 router.delete("/:id", deleteProduct);
 
